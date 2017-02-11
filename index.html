@@ -86,7 +86,7 @@
       })
     });
 
-    // Revenue Options 
+    // Revenue Charts Options 
     var revOptions = {
       xAxis: {
         categories: ['2011', '2012', '2013', '2014', '2015']
@@ -112,7 +112,7 @@
       },
     };
       
-    // Transactions Options  
+    // Transactions Charts Options  
     var ttOptions = {
     	xAxis: {
 				categories: ['2011', '2012', '2013', '2014', '2015']
@@ -187,7 +187,7 @@
       	}
       },
       plotOptions: {
-        series: {
+        column: {
           stacking: "normal" // vs. "percent"
         }
       },
@@ -195,9 +195,9 @@
         renderTo: "chart-tandt-ca",
         type: "column"
       },
-      series: []
+      series: [{}]
     };
-
+/*
     var chartTandtTx = {
       title: {
         text: "Transactions and Traffic in Texas"
@@ -237,7 +237,7 @@
         type: "column"
       },
     };
-
+*/
     // Color Picker
     function colors(i) {
       switch(i) {
