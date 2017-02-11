@@ -46,7 +46,9 @@
           borderRadius: 0,
           itemStyle: {
             color: "#000000",
-            fontFamily: "Helvetica,Arial,sans-serif"
+            fontFamily: "Helvetica,Arial,sans-serif",
+            fontSize: "14px",
+            fontWeight: "bold"
           }
         },
         title: {
@@ -67,7 +69,7 @@
           style: {
             color: "#333333",
             fontFamily: "Arial, sans-serif",
-            fontSize: "14px",
+            fontSize: "20px",
             padding: "10px"
           }
         },
@@ -76,21 +78,24 @@
             style: {
               color: "#333333",
               fontFamily: "Helvetica,Arial,sans-serif",
-              fontSize: "10px"
+              fontSize: "12px"
             }
           },
+          //max: 220,
+          //min: 0,
         },
         yAxis: {
           labels: {
             style: {
               color: "#333333",
               fontFamily: "Helvetica,Arial,sans-serif",
-              fontSize: "10px"
+              fontSize: "12px"
             }
           },
-          tickInterval: 5,
-          max: 30,
-          min: -31,
+          type: 'logarithmic',
+          tickInterval: .1,
+          max: 8000,
+          min: 100,
           plotLines: [{
             value: 0,
             width: 1,
@@ -108,7 +113,12 @@
       },
       yAxis: {
         title: {
-            text: 'Change in Revenue from Previous Year (%)'
+            text: 'Annual Revenue (in million USD)',
+            style: {
+              color: "#333333",
+              fontFamily: "Helvetica,Arial,sans-serif",
+              fontSize: "18px"
+            }
         },
         plotLines: [{
             value: 0,
@@ -129,7 +139,7 @@
         
     var chartRevCa = {      
         title: {
-          text: "Revenue Growth in California"
+          text: "Revenue in California"
         },
         chart: {
         // ADD CODE HERE to fill in the renderTo property with the div id for your second chart container
@@ -141,7 +151,7 @@
     };
     var chartRevTx = {      
         title: {
-          text: "Revenue Growth in Texas"
+          text: "Revenue in Texas"
         },      
         chart: {
         // ADD CODE HERE to fill in the renderTo property with the div id for your second chart container
@@ -153,7 +163,7 @@
     };
     var chartRevOr = {      
         title: {
-          text: "Revenue Growth in Oregon"
+          text: "Revenue in Oregon"
         },      
         chart: {
         // ADD CODE HERE to fill in the renderTo property with the div id for your second chart container
@@ -185,7 +195,7 @@
           return "#d6ea3b"; // safeway
           break;
         case 5:
-          return "#AAAAAA"; // whole foods
+          return "#333333"; // whole foods
           break;
         case 6:
           return "#ff8319"; // target
@@ -225,7 +235,7 @@
           var state = states[items[1]];
                     console.log(items[0]);
                     console.log(items[1]);
-          revByStore[store][state].push(parseFloat(items[6]));
+          revByStore[store][state].push(parseFloat(items[5]));
          }; // /else
 
        }); // /$.each()
