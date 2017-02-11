@@ -17,24 +17,20 @@
     <div id="wrapper">
       <h3>Markets Shiz... by Peter Rowland & Steve Trush</h3>
 
-      <!--
-      ADD two div containers, one for each chart.
-      Make sure you adjust the CSS so that the end result looks
-      similar to expectedresult.png. The two charts should be side-by-side.
-      If you are having issues make sure your browser is not zoomed in past 100%.
-      -->
+      <!-- Revenue Growth by State -->
       <div id="chart-rev-ca"> </div>
       <div id="chart-rev-tx"> </div>
-      <div id="chart-rev-or"> </div>      
+      <div id="chart-rev-or"> </div> 
+      
+      <!-- Transactions / Traffic by State -->
+      <div id="chart-tandt-ca"> </div> 
+      <div id="chart-tandt-tx"> </div> 
+      <div id="chart-tandt-or"> </div>      
 
     </div>
 
     <script>
 
-    // Here we are declaring a function using Highcharts.setOptions
-    // This configures global options that will apply for both charts.
-    // These options work like a style theme.
-    // http://www.highcharts.com/docs/getting-started/how-to-set-options#2
     $(function () {
       Highcharts.setOptions({
         chart: {
@@ -58,8 +54,6 @@
           }
         },
         tooltip: {
-          // ADD CODE HERE to set up the tooltip options.
-          // Hints: borderRadius, borderWidth, shadow
           borderRadius: 5,
           borderWidth: 1,
           shadow: true,
@@ -87,34 +81,25 @@
               fontFamily: "Helvetica,Arial,sans-serif",
               fontSize: "10px"
             }
-          },
-          tickInterval: 5,
-          max: 30,
-          min: -31,
-          plotLines: [{
-            value: 0,
-            width: 1,
-            color: "#808080"
-          }],
+          }
         }
       })
     });
 
-    // Set up an options object that will hold the charts' shared xAxis categories
-    // ADD CODE HERE to hold the xAxis categories
-    var options = {
+    // Revenue Options 
+    var revOptions = {
       xAxis: {
         categories: ['2011', '2012', '2013', '2014', '2015']
       },
       yAxis: {
-        title: {
-            text: 'Change in Revenue from Previous Year (%)'
-        },
-        plotLines: [{
-            value: 0,
-            width: 3,
-            color: '#808080'
-        }]
+	      tickInterval: 5,
+	  		max: 30,
+	  		min: -31,
+			  plotLines: [{
+			    value: 0,
+			    width: 1,
+			    color: "#808080"
+			  }],
       },
       tooltip: {
         valueSuffix: '%'
@@ -122,19 +107,38 @@
       legend: {
         layout: 'vertical',
         align: 'right',
-        verticalAlign: 'middle',
+        //verticalAlign: 'middle',
         borderWidth: 0
       },
     };
-        
+      
+    // Transactions Options  
+    var ttOptions = {
+    	xAxis: {
+				categories: ['2011', '2012', '2013', '2014', '2015']
+    	},
+      yAxis: {
+	      //tickInterval: 5,
+	  		min: 0,
+			  plotLines: [{
+			    value: 0,
+			    width: 1,
+			    color: "#808080"
+			  }],
+      },
+    };
+
     var chartRevCa = {      
         title: {
           text: "Revenue Growth in California"
         },
+        yAxis: {
+        	title: {
+            text: 'Change in Revenue from Previous Year (%)'
+        	},
+        },
         chart: {
-        // ADD CODE HERE to fill in the renderTo property with the div id for your second chart container
           renderTo: "chart-rev-ca",
-        // ADD CODE HERE to fill in the type property to make a line chart
           type: "line"
         },
         series: []
@@ -143,30 +147,98 @@
         title: {
           text: "Revenue Growth in Texas"
         },      
+        yAxis: {
+        	title: {
+          	text: 'Change in Revenue from Previous Year (%)'
+        	},
+        },
         chart: {
-        // ADD CODE HERE to fill in the renderTo property with the div id for your second chart container
           renderTo: "chart-rev-tx",
-        // ADD CODE HERE to fill in the type property to make a line chart
           type: "line"
         },
         series: []
     };
     var chartRevOr = {      
         title: {
-          text: "Revenue Growth in Oregon"
+        	text: "Revenue Growth in Oregon"
         },      
+        yAxis: {
+        	title: {
+          	text: 'Change in Revenue from Previous Year (%)'
+        	},
+        },
+        
         chart: {
-        // ADD CODE HERE to fill in the renderTo property with the div id for your second chart container
           renderTo: "chart-rev-or",
-        // ADD CODE HERE to fill in the type property to make a line chart
           type: "line"
+      	},
+      	series: []
+    };
+    
+    // -----
+
+    var chartTandtCa = {
+      title: {
+        text: "Transactions and Traffic in California"
+      },
+      yAxis: {
+      	title: {
+      		text: 'Volume (in millions)'
+      	}
+      },
+      plotOptions: {
+        series: {
+          stacking: "normal" // vs. "percent"
+        }
+      },
+      chart: {
+        renderTo: "chart-tandt-ca",
+        type: "column"
       },
       series: []
     };
-        
 
-    // Here we are declaring a function to return color for each season.
-    // This allows us to choose the colors that will be used in the charts.
+    var chartTandtTx = {
+      title: {
+        text: "Transactions and Traffic in Texas"
+      },
+      yAxis: {
+      	title: {
+      		text: 'Volume (in millions)'
+      	}
+      },
+      plotOptions: {
+        series: {
+          stacking: "normal" // vs. "percent"
+        }
+      },
+      chart: {
+        renderTo: "chart-tandt-tx",
+        type: "column"
+      },
+    };
+
+    var chartTandtOr = {
+      title: {
+        text: "Transactions and Traffic in Oregon"
+      },
+      yAxis: {
+      	title: {
+      		text: 'Volume (in millions)'
+      	}
+      },
+      plotOptions: {
+        series: {
+          stacking: "normal" // vs. "percent"
+        }
+      },
+      chart: {
+        renderTo: "chart-tandt-or",
+        type: "column"
+      },
+    };
+
+    // Color Picker
     function colors(i) {
       switch(i) {
         case 0:
@@ -194,43 +266,68 @@
 
     $.get("_data/supermarkets.csv", function(data) {
 
-    // We'll split the CSV by line ("\n")
+    	// Common
       var lines = data.split('\n');
-      // ADD CODE HERE to set up variables for the Chart One data:
-        // Declare a variable "seasons" that is an empty array that will be populated by the season names.
-      var storenames = ["Walmart","Safeway","Whole Foods","Target","Costco","Kmart","Trader Joes"];
-      var stores = {"Walmart":0,"Safeway":1,"Whole Foods":2,"Target":3,"Costco":4,"Kmart":5,"Trader Joes":6};
-      var states = {"California":0,"Texas":1,"Oregon":2};
-        // Declare a variable "rainBySeason" that is an array containing 4 empty arrays, each of will be populated by rainfall sums per season (e.g. [17.41, 13.07, 6.99, ...] for winter).
+      var storenames = [
+      	"Walmart",
+      	"Safeway",
+      	"Whole Foods",
+      	"Target",
+      	"Costco",
+      	"Kmart",
+      	"Trader Joes"
+      ];
+      
+      var stores = {
+      	"Walmart":0,
+      	"Safeway":1,
+      	"Whole Foods":2,
+      	"Target":3,
+      	"Costco":4,
+      	"Kmart":5,
+      	"Trader Joes":6
+      };
+      
+      var states = {
+      	"California":0,
+      	"Texas":1,
+      	"Oregon":2
+      };
+
+      // Revenue Variable
       var revByStore = new Array(7);
       for (var i = 0; i < revByStore.length; i++){
-
-          revByStore[i] = [[],[],[]];
+        revByStore[i] = [[],[],[]];
       }
 
-      $.each(lines, function(index,value) {
-        var line = value;
-        var lineNo = index;
+      // Transaction / Traffic Variables
+      // [0] = items[3], [1] = items[4]
+      var transTraffByStore = new Array(7); 
+			for (var i = 0; i < revByStore.length; i++){
+			  transTraffByStore[i] = [ [[], []], [[], []], [[], []] ];
+			}     	
 
+      $.each(lines, function(index,value) {
+        var lineNo = index;
+        var line = value;
         var items = line.split(",");
-        // If it's the header...
+
+        // Header, ignore
         if (lineNo == 0) {
 
-        // Otherwise, if you're working with content...
+        // Rows, data
         } else {
-
-          // Now we need to populate "options.xAxis.categories" array with the Years ("2000", "2001", "2002", etc.)
-          // Each line of data is a year so we want to add the first value in the array to the xAxis categories.
           var store = stores[items[0]];
           var state = states[items[1]];
-                    console.log(items[0]);
-                    console.log(items[1]);
           revByStore[store][state].push(parseFloat(items[6]));
-         }; // /else
+          transTraffByStore[store][state][0].push(parseFloat(items[3]));
+          transTraffByStore[store][state][1].push(parseFloat(items[4]));
 
+         }; // /else
        }); // /$.each()
 
-        // We'll use a for loop to populate "chartOne.series"
+      	// Push Data to Chart Objects
+        // CA Revenue
         for(var i = 0; i < revByStore.length; i++) {
            var chartRevCaData = {
                 name: storenames[i],
@@ -239,11 +336,10 @@
                 index: revByStore.length - 1 - i,
                 legendIndex: i
             };
-
-        // ADD CODE HERE to push the chartOneData object to "chartOne.series":
             chartRevCa.series.push(chartRevCaData);
         };
         
+        // TX Revenue
         for(var i = 0; i < revByStore.length; i++) {
            var chartRevTxData = {
                 name: storenames[i],
@@ -253,10 +349,10 @@
                 legendIndex: i
             };
 
-        // ADD CODE HERE to push the chartOneData object to "chartOne.series":
             chartRevTx.series.push(chartRevTxData);
         };
-        
+
+				// OR Revenue      
         for(var i = 0; i < revByStore.length; i++) {
            var chartRevOrData = {
                 name: storenames[[i]],
@@ -265,23 +361,45 @@
                 index: revByStore.length - 1 - i,
                 legendIndex: i
             };
-
-        // ADD CODE HERE to push the chartOneData object to "chartOne.series":
             chartRevOr.series.push(chartRevOrData);
         };
-        
 
-      chartRevCa = jQuery.extend(true, {}, options, chartRevCa);
+        // CA Traffic / Transactions
+				for(var i = 0; i < transTraffByStore.length; i++) {
+           var chartTandtCaData = {
+                name: storenames[[i]],
+                data: { 
+                	traffic: transTraffByStore[i][0][0],
+                	transactions: transTraffByStore[i][0][1]
+                },
+                color: colors(i),
+                index: revByStore.length - 1 - i,
+                legendIndex: i
+            };
+            chartTandtCa.series.push(chartTandtCaData);
+        };        
+
+      // Chart Objects
+      chartRevCa = jQuery.extend(true, {}, revOptions, chartRevCa);
       var chart1 = new Highcharts.Chart(chartRevCa);
       
-      chartRevTx = jQuery.extend(true, {}, options, chartRevTx);
+      chartRevTx = jQuery.extend(true, {}, revOptions, chartRevTx);
       var chart2 = new Highcharts.Chart(chartRevTx);        
 
-      chartRevOr = jQuery.extend(true, {}, options, chartRevOr);
-      var chart3 = new Highcharts.Chart(chartRevOr);        
+      chartRevOr = jQuery.extend(true, {}, revOptions, chartRevOr);
+      var chart3 = new Highcharts.Chart(chartRevOr);  
 
-    });
+      chartTandtCa = jQuery.extend(true, {}, ttOptions, chartTandtCa);
+      var chart4 = new Highcharts.Chart(chartTandtCa);      
 
+		//Debug
+    console.log(revByStore);
+    console.log(chartTandtCa);  
+    
+    }); // /.get()
+
+		
+    
 
     </script>
 
