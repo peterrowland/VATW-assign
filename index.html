@@ -23,9 +23,9 @@
       <div id="chart-rev-or"> </div>
 
       <!-- Transactions / Traffic by State -->
-      <div id="chart-tandt-ca"> </div>
-      <div id="chart-tandt-tx"> </div>
-      <div id="chart-tandt-or"> </div>
+      <div id="chart-tandt-ca", class="chart-800"> </div>
+      <div id="chart-tandt-tx", class="chart-800"> </div>
+      <div id="chart-tandt-or", class="chart-800"> </div>
 
     </div>
 
@@ -370,7 +370,7 @@
            var chartTandtCaData = {
                 name: storenames[[i]] + " Transactions",
                 data: transTraffByStore[i][0][0],
-                stack: storenames[[i]],
+                stack: storenames[[i]] + " Transactions",
                 color: colors(i),
                 index: transTraffByStore.length - 1 - i,
                 legendIndex: i
