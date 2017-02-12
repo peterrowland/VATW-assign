@@ -195,10 +195,9 @@
         renderTo: "chart-tandt-ca",
         type: "column"
       },
-
       series: []
     };
-/*
+
     var chartTandtTx = {
       title: {
         text: "Transactions and Traffic in Texas"
@@ -217,6 +216,7 @@
         renderTo: "chart-tandt-tx",
         type: "column"
       },
+      series: []
     };
 
     var chartTandtOr = {
@@ -237,8 +237,9 @@
         renderTo: "chart-tandt-or",
         type: "column"
       },
+      series: []
     };
-*/
+
     // Color Picker
     function colors(i) {
       switch(i) {
@@ -367,7 +368,7 @@
 
         // CA Traffic
 				for(var i = 0; i < transTraffByStore.length; i++) {
-           var chartTandtCaData = {
+           var chartTransCaData = {
                 name: storenames[[i]] + " Transactions",
                 data: transTraffByStore[i][0][0],
                 stack: storenames[[i]] + " Transactions",
@@ -375,9 +376,9 @@
                 index: transTraffByStore.length - 1 - i,
                 legendIndex: i
             };
-            chartTandtCa.series.push(chartTandtCaData);
+            chartTandtCa.series.push(chartTransCaData);
 
-            var chartTandtCaData = {
+            var chartTrafCaData = {
                  name: storenames[[i]] + " Traffic",
                  data: transTraffByStore[i][0][1],
                  stack: storenames[[i]],
@@ -385,8 +386,55 @@
                  index: transTraffByStore.length - 1 - i,
                  legendIndex: i
             };
-            chartTandtCa.series.push(chartTandtCaData);
+            chartTandtCa.series.push(chartTrafCaData);
           };
+
+          // TX Traffic
+  				for(var i = 0; i < transTraffByStore.length; i++) {
+             var chartTransTxData = {
+                  name: storenames[[i]] + " Transactions",
+                  data: transTraffByStore[i][1][0],
+                  stack: storenames[[i]] + " Transactions",
+                  color: colors(i),
+                  index: transTraffByStore.length - 1 - i,
+                  legendIndex: i
+              };
+              chartTandtTx.series.push(chartTransTxData);
+
+              var chartTrafTxData = {
+                   name: storenames[[i]] + " Traffic",
+                   data: transTraffByStore[i][1][1],
+                   stack: storenames[[i]],
+                   color: colors(i),
+                   index: transTraffByStore.length - 1 - i,
+                   legendIndex: i
+              };
+              chartTandtTx.series.push(chartTrafTxData);
+            };
+
+            // OR Traffic
+    				for(var i = 0; i < transTraffByStore.length; i++) {
+               var chartTransOrData = {
+                    name: storenames[[i]] + " Transactions",
+                    data: transTraffByStore[i][2][0],
+                    stack: storenames[[i]] + " Transactions",
+                    color: colors(i),
+                    index: transTraffByStore.length - 1 - i,
+                    legendIndex: i
+                };
+                chartTandtOr.series.push(chartTransOrData);
+
+                var chartTrafOrData = {
+                     name: storenames[[i]] + " Traffic",
+                     data: transTraffByStore[i][2][1],
+                     stack: storenames[[i]],
+                     color: colors(i),
+                     index: transTraffByStore.length - 1 - i,
+                     legendIndex: i
+                };
+                chartTandtOr.series.push(chartTrafOrData);
+              };
+
 
       // Chart Objects
       chartRevCa = jQuery.extend(true, {}, revOptions, chartRevCa);
@@ -400,6 +448,12 @@
 
       chartTandtCa = jQuery.extend(true, {}, ttOptions, chartTandtCa);
       var chart4 = new Highcharts.Chart(chartTandtCa);
+
+      chartTandtTx = jQuery.extend(true, {}, ttOptions, chartTandtTx);
+      var chart5 = new Highcharts.Chart(chartTandtTx);
+
+      chartTandtOr = jQuery.extend(true, {}, ttOptions, chartTandtOr);
+      var chart6 = new Highcharts.Chart(chartTandtOr);
 
 		//Debug
     console.log(revByStore);
