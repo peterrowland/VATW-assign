@@ -3,11 +3,7 @@
   <head>
       <meta charset="UTF-8" />
       <title>Supermarkets</title>
-
-      <!-- Remember to edit the CSS so that your result looks similar
-      to expectedresult.png -->
       <link rel="stylesheet" href="_css/hw1.css">
-
       <script src="_js/jquery-1.11.0.min.js"></script>
       <script src="_js/highcharts.js"></script>
   </head>
@@ -17,24 +13,20 @@
     <div id="wrapper">
       <h3>Markets Shiz... by Peter Rowland & Steve Trush</h3>
 
-      <!--
-      ADD two div containers, one for each chart.
-      Make sure you adjust the CSS so that the end result looks
-      similar to expectedresult.png. The two charts should be side-by-side.
-      If you are having issues make sure your browser is not zoomed in past 100%.
-      -->
+      <!-- Revenue Growth by State -->
       <div id="chart-rev-ca"> </div>
       <div id="chart-rev-tx"> </div>
-      <div id="chart-rev-or"> </div>      
+      <div id="chart-rev-or"> </div>
+
+      <!-- Transactions / Traffic by State -->
+      <div id="chart-tandt-ca", class="chart-800"> </div>
+      <div id="chart-tandt-tx", class="chart-800"> </div>
+      <div id="chart-tandt-or", class="chart-800"> </div>
 
     </div>
 
     <script>
 
-    // Here we are declaring a function using Highcharts.setOptions
-    // This configures global options that will apply for both charts.
-    // These options work like a style theme.
-    // http://www.highcharts.com/docs/getting-started/how-to-set-options#2
     $(function () {
       Highcharts.setOptions({
         chart: {
@@ -60,8 +52,6 @@
           }
         },
         tooltip: {
-          // ADD CODE HERE to set up the tooltip options.
-          // Hints: borderRadius, borderWidth, shadow
           borderRadius: 5,
           borderWidth: 1,
           shadow: true,
@@ -80,9 +70,7 @@
               fontFamily: "Helvetica,Arial,sans-serif",
               fontSize: "12px"
             }
-          },
-          //max: 220,
-          //min: 0,
+          }
         },
         yAxis: {
           labels: {
@@ -91,93 +79,175 @@
               fontFamily: "Helvetica,Arial,sans-serif",
               fontSize: "12px"
             }
+          }
           },
-          type: 'logarithmic',
-          tickInterval: .1,
-          max: 8000,
-          min: 100,
-          plotLines: [{
-            value: 0,
-            width: 1,
-            color: "#808080"
-          }],
-        }
+
       })
     });
 
-    // Set up an options object that will hold the charts' shared xAxis categories
-    // ADD CODE HERE to hold the xAxis categories
-    var options = {
+    // Revenue Charts Options
+    var revOptions = {
       xAxis: {
         categories: ['2011', '2012', '2013', '2014', '2015']
       },
       yAxis: {
+        type: 'logarithmic',
+        tickInterval: .1,
+        max: 8000,
+        min: 100,
+        plotLines: [{
+          value: 0,
+          width: 1,
+          color: "#808080"
+        }],
         title: {
-            text: 'Annual Revenue (in million USD)',
-            style: {
-              color: "#333333",
-              fontFamily: "Helvetica,Arial,sans-serif",
-              fontSize: "18px"
-            }
+            text: 'Annual Revenue (in million USD)'
         },
         plotLines: [{
             value: 0,
             width: 3,
             color: '#808080'
-        }]
-      },
-      tooltip: {
-        valuePrefix: '$',
-        valueSuffix: 'mil'
-      },
-      legend: {
-        layout: 'vertical',
-        align: 'right',
-        verticalAlign: 'middle',
-        borderWidth: 0
-      },
+        }],
+        tooltip: {
+          valuePrefix: '$',
+          valueSuffix: 'mil'
+        },
+        legend: {
+          layout: 'vertical',
+          align: 'right',
+          borderWidth: 0
+        }
+      }
+    }; // revOptions
+
+    // Transactions Charts Options
+    var ttOptions = {
+    	xAxis: {
+				categories: ['2011', '2012', '2013', '2014', '2015']
+    	},
+      yAxis: {
+	  		min: 0,
+			  plotLines: [{
+			    value: 0,
+			    width: 1,
+			    color: "#808080"
+			  }],
+      }
     };
-        
-    var chartRevCa = {      
+
+    var chartRevCa = {
         title: {
           text: "Revenue in California"
         },
+        yAxis: {
+        	title: {
+            text: 'Change in Revenue from Previous Year (%)'
+        	},
+        },
         chart: {
-        // ADD CODE HERE to fill in the renderTo property with the div id for your second chart container
           renderTo: "chart-rev-ca",
-        // ADD CODE HERE to fill in the type property to make a line chart
           type: "line"
         },
         series: []
     };
-    var chartRevTx = {      
+
+    var chartRevTx = {
         title: {
           text: "Revenue in Texas"
-        },      
+        },
+        yAxis: {
+        	title: {
+          	text: 'Change in Revenue from Previous Year (%)'
+        	}
+        },
         chart: {
-        // ADD CODE HERE to fill in the renderTo property with the div id for your second chart container
           renderTo: "chart-rev-tx",
-        // ADD CODE HERE to fill in the type property to make a line chart
           type: "line"
         },
         series: []
     };
-    var chartRevOr = {      
+
+    var chartRevOr = {
         title: {
           text: "Revenue in Oregon"
-        },      
+        },
+        yAxis: {
+        	title: {
+          	text: 'Change in Revenue from Previous Year (%)'
+        	}
+        },
         chart: {
-        // ADD CODE HERE to fill in the renderTo property with the div id for your second chart container
           renderTo: "chart-rev-or",
-        // ADD CODE HERE to fill in the type property to make a line chart
           type: "line"
+      	},
+      	series: []
+    };
+
+
+    var chartTandtCa = {
+      title: {
+        text: "Transactions and Traffic in California"
+      },
+      yAxis: {
+      	title: {
+      		text: 'Volume (in millions)'
+      	}
+      },
+      plotOptions: {
+        column: {
+          stacking: "normal" // vs. "percent"
+        }
+      },
+      chart: {
+        renderTo: "chart-tandt-ca",
+        type: "column"
       },
       series: []
     };
-        
 
-    // Here we are declaring a function to return color for each season.
-    // This allows us to choose the colors that will be used in the charts.
+    var chartTandtTx = {
+      title: {
+        text: "Transactions and Traffic in Texas"
+      },
+      yAxis: {
+      	title: {
+      		text: 'Volume (in millions)'
+      	}
+      },
+      plotOptions: {
+        series: {
+          stacking: "normal" // vs. "percent"
+        }
+      },
+      chart: {
+        renderTo: "chart-tandt-tx",
+        type: "column"
+      },
+      series: []
+    };
+
+    var chartTandtOr = {
+      title: {
+        text: "Transactions and Traffic in Oregon"
+      },
+      yAxis: {
+      	title: {
+      		text: 'Volume (in millions)'
+      	}
+      },
+      plotOptions: {
+        series: {
+          stacking: "normal" // vs. "percent"
+        }
+      },
+      chart: {
+        renderTo: "chart-tandt-or",
+        type: "column"
+      },
+      series: []
+    };
+
+    // Color Picker
     function colors(i) {
       switch(i) {
         case 0:
@@ -203,45 +273,73 @@
       };
     };
 
+// Load Data
+
     $.get("_data/supermarkets.csv", function(data) {
 
-    // We'll split the CSV by line ("\n")
+    	// Common
       var lines = data.split('\n');
-      // ADD CODE HERE to set up variables for the Chart One data:
-        // Declare a variable "seasons" that is an empty array that will be populated by the season names.
-      var storenames = ["Walmart","Safeway","Whole Foods","Target","Costco","Kmart","Trader Joes"];
-      var stores = {"Walmart":0,"Safeway":1,"Whole Foods":2,"Target":3,"Costco":4,"Kmart":5,"Trader Joes":6};
-      var states = {"California":0,"Texas":1,"Oregon":2};
-        // Declare a variable "rainBySeason" that is an array containing 4 empty arrays, each of will be populated by rainfall sums per season (e.g. [17.41, 13.07, 6.99, ...] for winter).
+      var storenames = [
+      	"Walmart",
+      	"Safeway",
+      	"Whole Foods",
+      	"Target",
+      	"Costco",
+      	"Kmart",
+      	"Trader Joes"
+      ];
+
+      var stores = {
+      	"Walmart":0,
+      	"Safeway":1,
+      	"Whole Foods":2,
+      	"Target":3,
+      	"Costco":4,
+      	"Kmart":5,
+      	"Trader Joes":6
+      };
+
+      var states = {
+      	"California":0,
+      	"Texas":1,
+      	"Oregon":2
+      };
+
+      // Revenue Variable
       var revByStore = new Array(7);
       for (var i = 0; i < revByStore.length; i++){
-
-          revByStore[i] = [[],[],[]];
+        revByStore[i] = [[],[],[]];
       }
 
-      $.each(lines, function(index,value) {
-        var line = value;
-        var lineNo = index;
+      // Transaction / Traffic Variables
+      // [0] = items[3], [1] = items[4]
+      var transTraffByStore = new Array(7);
+			for (var i = 0; i < revByStore.length; i++){
+			  transTraffByStore[i] = [ [[], []], [[], []], [[], []] ];
+			}
 
+      $.each(lines, function(index,value) {
+        var lineNo = index;
+        var line = value;
         var items = line.split(",");
-        // If it's the header...
+
+        // Header, ignore
         if (lineNo == 0) {
 
-        // Otherwise, if you're working with content...
+        // Rows, data
         } else {
-
-          // Now we need to populate "options.xAxis.categories" array with the Years ("2000", "2001", "2002", etc.)
-          // Each line of data is a year so we want to add the first value in the array to the xAxis categories.
           var store = stores[items[0]];
           var state = states[items[1]];
-                    console.log(items[0]);
-                    console.log(items[1]);
           revByStore[store][state].push(parseFloat(items[5]));
+          transTraffByStore[store][state][0].push(parseFloat(items[3]));
+          transTraffByStore[store][state][1].push(parseFloat(items[4]));
          }; // /else
 
        }); // /$.each()
 
-        // We'll use a for loop to populate "chartOne.series"
+
+      	// Push Data to Chart Objects
+        // CA Revenue
         for(var i = 0; i < revByStore.length; i++) {
            var chartRevCaData = {
                 name: storenames[i],
@@ -250,11 +348,10 @@
                 index: revByStore.length - 1 - i,
                 legendIndex: i
             };
-
-        // ADD CODE HERE to push the chartOneData object to "chartOne.series":
             chartRevCa.series.push(chartRevCaData);
-        };
-        
+        }; // for()
+
+        // TX Revenue
         for(var i = 0; i < revByStore.length; i++) {
            var chartRevTxData = {
                 name: storenames[i],
@@ -264,10 +361,10 @@
                 legendIndex: i
             };
 
-        // ADD CODE HERE to push the chartOneData object to "chartOne.series":
             chartRevTx.series.push(chartRevTxData);
-        };
-        
+        }; // for()
+
+				// OR Revenue
         for(var i = 0; i < revByStore.length; i++) {
            var chartRevOrData = {
                 name: storenames[[i]],
@@ -276,22 +373,106 @@
                 index: revByStore.length - 1 - i,
                 legendIndex: i
             };
-
-        // ADD CODE HERE to push the chartOneData object to "chartOne.series":
             chartRevOr.series.push(chartRevOrData);
-        };
-        
+        }; // for()
 
-      chartRevCa = jQuery.extend(true, {}, options, chartRevCa);
+        // CA Traffic
+				for(var i = 0; i < transTraffByStore.length; i++) {
+           var chartTransCaData = {
+                name: storenames[[i]] + " Transactions",
+                data: transTraffByStore[i][0][0],
+                stack: storenames[[i]] + " Transactions",
+                color: colors(i),
+                index: transTraffByStore.length - 1 - i,
+                legendIndex: i
+            };
+            chartTandtCa.series.push(chartTransCaData);
+
+            var chartTrafCaData = {
+                 name: storenames[[i]] + " Traffic",
+                 data: transTraffByStore[i][0][1],
+                 stack: storenames[[i]],
+                 color: colors(i),
+                 index: transTraffByStore.length - 1 - i,
+                 legendIndex: i
+            };
+            chartTandtCa.series.push(chartTrafCaData);
+          }; // for()
+
+          // TX Traffic
+  				for(var i = 0; i < transTraffByStore.length; i++) {
+             var chartTransTxData = {
+                  name: storenames[[i]] + " Transactions",
+                  data: transTraffByStore[i][1][0],
+                  stack: storenames[[i]] + " Transactions",
+                  color: colors(i),
+                  index: transTraffByStore.length - 1 - i,
+                  legendIndex: i
+              };
+              chartTandtTx.series.push(chartTransTxData);
+
+              var chartTrafTxData = {
+                   name: storenames[[i]] + " Traffic",
+                   data: transTraffByStore[i][1][1],
+                   stack: storenames[[i]],
+                   color: colors(i),
+                   index: transTraffByStore.length - 1 - i,
+                   legendIndex: i
+              };
+              chartTandtTx.series.push(chartTrafTxData);
+            }; // for()
+
+            // OR Traffic
+    				for(var i = 0; i < transTraffByStore.length; i++) {
+               var chartTransOrData = {
+                    name: storenames[[i]] + " Transactions",
+                    data: transTraffByStore[i][2][0],
+                    stack: storenames[[i]] + " Transactions",
+                    color: colors(i),
+                    index: transTraffByStore.length - 1 - i,
+                    legendIndex: i
+                };
+                chartTandtOr.series.push(chartTransOrData);
+
+                var chartTrafOrData = {
+                     name: storenames[[i]] + " Traffic",
+                     data: transTraffByStore[i][2][1],
+                     stack: storenames[[i]],
+                     color: colors(i),
+                     index: transTraffByStore.length - 1 - i,
+                     legendIndex: i
+                };
+                chartTandtOr.series.push(chartTrafOrData);
+              }; // for()
+
+
+      // Chart Objects
+      chartRevCa = jQuery.extend(true, {}, revOptions, chartRevCa);
       var chart1 = new Highcharts.Chart(chartRevCa);
-      
-      chartRevTx = jQuery.extend(true, {}, options, chartRevTx);
-      var chart2 = new Highcharts.Chart(chartRevTx);        
 
-      chartRevOr = jQuery.extend(true, {}, options, chartRevOr);
-      var chart3 = new Highcharts.Chart(chartRevOr);        
+      chartRevTx = jQuery.extend(true, {}, revOptions, chartRevTx);
+      var chart2 = new Highcharts.Chart(chartRevTx);
 
-    });
+      chartRevOr = jQuery.extend(true, {}, revOptions, chartRevOr);
+      var chart3 = new Highcharts.Chart(chartRevOr);
+
+      chartTandtCa = jQuery.extend(true, {}, ttOptions, chartTandtCa);
+      var chart4 = new Highcharts.Chart(chartTandtCa);
+
+      chartTandtTx = jQuery.extend(true, {}, ttOptions, chartTandtTx);
+      var chart5 = new Highcharts.Chart(chartTandtTx);
+
+      chartTandtOr = jQuery.extend(true, {}, ttOptions, chartTandtOr);
+      var chart6 = new Highcharts.Chart(chartTandtOr);
+
+    }); // /.get()
+		//Debug
+    console.log(revByStore);
+    console.log(chartTandtCa);
+
+
+
+
 
 
     </script>
