@@ -3,11 +3,7 @@
   <head>
       <meta charset="UTF-8" />
       <title>Supermarkets</title>
-
-      <!-- Remember to edit the CSS so that your result looks similar
-      to expectedresult.png -->
       <link rel="stylesheet" href="_css/hw1.css">
-
       <script src="_js/jquery-1.11.0.min.js"></script>
       <script src="_js/highcharts.js"></script>
   </head>
@@ -42,7 +38,9 @@
           borderRadius: 0,
           itemStyle: {
             color: "#000000",
-            fontFamily: "Helvetica,Arial,sans-serif"
+            fontFamily: "Helvetica,Arial,sans-serif",
+            fontSize: "14px",
+            fontWeight: "bold"
           }
         },
         title: {
@@ -61,7 +59,7 @@
           style: {
             color: "#333333",
             fontFamily: "Arial, sans-serif",
-            fontSize: "14px",
+            fontSize: "20px",
             padding: "10px"
           }
         },
@@ -70,19 +68,20 @@
             style: {
               color: "#333333",
               fontFamily: "Helvetica,Arial,sans-serif",
-              fontSize: "10px"
+              fontSize: "12px"
             }
-          },
+          }
         },
         yAxis: {
           labels: {
             style: {
               color: "#333333",
               fontFamily: "Helvetica,Arial,sans-serif",
-              fontSize: "10px"
+              fontSize: "12px"
             }
           }
-        }
+          },
+
       })
     });
 
@@ -92,25 +91,34 @@
         categories: ['2011', '2012', '2013', '2014', '2015']
       },
       yAxis: {
-	      tickInterval: 5,
-	  		max: 30,
-	  		min: -31,
-			  plotLines: [{
-			    value: 0,
-			    width: 1,
-			    color: "#808080"
-			  }],
-      },
-      tooltip: {
-        valueSuffix: '%'
-      },
-      legend: {
-        layout: 'vertical',
-        align: 'right',
-        //verticalAlign: 'middle',
-        borderWidth: 0
-      },
-    };
+        type: 'logarithmic',
+        tickInterval: .1,
+        max: 8000,
+        min: 100,
+        plotLines: [{
+          value: 0,
+          width: 1,
+          color: "#808080"
+        }],
+        title: {
+            text: 'Annual Revenue (in million USD)'
+        },
+        plotLines: [{
+            value: 0,
+            width: 3,
+            color: '#808080'
+        }],
+        tooltip: {
+          valuePrefix: '$',
+          valueSuffix: 'mil'
+        },
+        legend: {
+          layout: 'vertical',
+          align: 'right',
+          borderWidth: 0
+        }
+      }
+    }; // revOptions
 
     // Transactions Charts Options
     var ttOptions = {
@@ -118,19 +126,18 @@
 				categories: ['2011', '2012', '2013', '2014', '2015']
     	},
       yAxis: {
-	      //tickInterval: 5,
 	  		min: 0,
 			  plotLines: [{
 			    value: 0,
 			    width: 1,
 			    color: "#808080"
 			  }],
-      },
+      }
     };
 
     var chartRevCa = {
         title: {
-          text: "Revenue Growth in California"
+          text: "Revenue in California"
         },
         yAxis: {
         	title: {
@@ -143,14 +150,15 @@
         },
         series: []
     };
+
     var chartRevTx = {
         title: {
-          text: "Revenue Growth in Texas"
+          text: "Revenue in Texas"
         },
         yAxis: {
         	title: {
           	text: 'Change in Revenue from Previous Year (%)'
-        	},
+        	}
         },
         chart: {
           renderTo: "chart-rev-tx",
@@ -158,16 +166,16 @@
         },
         series: []
     };
+
     var chartRevOr = {
         title: {
-        	text: "Revenue Growth in Oregon"
+          text: "Revenue in Oregon"
         },
         yAxis: {
         	title: {
           	text: 'Change in Revenue from Previous Year (%)'
-        	},
+        	}
         },
-
         chart: {
           renderTo: "chart-rev-or",
           type: "line"
@@ -175,7 +183,6 @@
       	series: []
     };
 
-    // -----
 
     var chartTandtCa = {
       title: {
@@ -259,12 +266,14 @@
           return "#d6ea3b"; // safeway
           break;
         case 5:
-          return "#AAAAAA"; // whole foods
+          return "#333333"; // whole foods
           break;
         case 6:
           return "#ff8319"; // target
       };
     };
+
+// Load Data
 
     $.get("_data/supermarkets.csv", function(data) {
 
@@ -321,12 +330,13 @@
         } else {
           var store = stores[items[0]];
           var state = states[items[1]];
-          revByStore[store][state].push(parseFloat(items[6]));
+          revByStore[store][state].push(parseFloat(items[5]));
           transTraffByStore[store][state][0].push(parseFloat(items[3]));
           transTraffByStore[store][state][1].push(parseFloat(items[4]));
-
          }; // /else
+
        }); // /$.each()
+
 
       	// Push Data to Chart Objects
         // CA Revenue
@@ -339,7 +349,7 @@
                 legendIndex: i
             };
             chartRevCa.series.push(chartRevCaData);
-        };
+        }; // for()
 
         // TX Revenue
         for(var i = 0; i < revByStore.length; i++) {
@@ -352,7 +362,7 @@
             };
 
             chartRevTx.series.push(chartRevTxData);
-        };
+        }; // for()
 
 				// OR Revenue
         for(var i = 0; i < revByStore.length; i++) {
@@ -364,7 +374,7 @@
                 legendIndex: i
             };
             chartRevOr.series.push(chartRevOrData);
-        };
+        }; // for()
 
         // CA Traffic
 				for(var i = 0; i < transTraffByStore.length; i++) {
@@ -387,7 +397,7 @@
                  legendIndex: i
             };
             chartTandtCa.series.push(chartTrafCaData);
-          };
+          }; // for()
 
           // TX Traffic
   				for(var i = 0; i < transTraffByStore.length; i++) {
@@ -410,7 +420,7 @@
                    legendIndex: i
               };
               chartTandtTx.series.push(chartTrafTxData);
-            };
+            }; // for()
 
             // OR Traffic
     				for(var i = 0; i < transTraffByStore.length; i++) {
@@ -433,7 +443,7 @@
                      legendIndex: i
                 };
                 chartTandtOr.series.push(chartTrafOrData);
-              };
+              }; // for()
 
 
       // Chart Objects
@@ -455,11 +465,12 @@
       chartTandtOr = jQuery.extend(true, {}, ttOptions, chartTandtOr);
       var chart6 = new Highcharts.Chart(chartTandtOr);
 
+    }); // /.get()
 		//Debug
     console.log(revByStore);
     console.log(chartTandtCa);
 
-    }); // /.get()
+
 
 
 
