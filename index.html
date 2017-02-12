@@ -20,12 +20,12 @@
       <!-- Revenue Growth by State -->
       <div id="chart-rev-ca"> </div>
       <div id="chart-rev-tx"> </div>
-      <div id="chart-rev-or"> </div> 
-      
+      <div id="chart-rev-or"> </div>
+
       <!-- Transactions / Traffic by State -->
-      <div id="chart-tandt-ca"> </div> 
-      <div id="chart-tandt-tx"> </div> 
-      <div id="chart-tandt-or"> </div>      
+      <div id="chart-tandt-ca"> </div>
+      <div id="chart-tandt-tx"> </div>
+      <div id="chart-tandt-or"> </div>
 
     </div>
 
@@ -86,7 +86,7 @@
       })
     });
 
-    // Revenue Charts Options 
+    // Revenue Charts Options
     var revOptions = {
       xAxis: {
         categories: ['2011', '2012', '2013', '2014', '2015']
@@ -111,8 +111,8 @@
         borderWidth: 0
       },
     };
-      
-    // Transactions Charts Options  
+
+    // Transactions Charts Options
     var ttOptions = {
     	xAxis: {
 				categories: ['2011', '2012', '2013', '2014', '2015']
@@ -128,7 +128,7 @@
       },
     };
 
-    var chartRevCa = {      
+    var chartRevCa = {
         title: {
           text: "Revenue Growth in California"
         },
@@ -143,10 +143,10 @@
         },
         series: []
     };
-    var chartRevTx = {      
+    var chartRevTx = {
         title: {
           text: "Revenue Growth in Texas"
-        },      
+        },
         yAxis: {
         	title: {
           	text: 'Change in Revenue from Previous Year (%)'
@@ -158,23 +158,23 @@
         },
         series: []
     };
-    var chartRevOr = {      
+    var chartRevOr = {
         title: {
         	text: "Revenue Growth in Oregon"
-        },      
+        },
         yAxis: {
         	title: {
           	text: 'Change in Revenue from Previous Year (%)'
         	},
         },
-        
+
         chart: {
           renderTo: "chart-rev-or",
           type: "line"
       	},
       	series: []
     };
-    
+
     // -----
 
     var chartTandtCa = {
@@ -195,6 +195,7 @@
         renderTo: "chart-tandt-ca",
         type: "column"
       },
+
       series: [{}]
     };
 /*
@@ -277,7 +278,7 @@
       	"Kmart",
       	"Trader Joes"
       ];
-      
+
       var stores = {
       	"Walmart":0,
       	"Safeway":1,
@@ -287,7 +288,7 @@
       	"Kmart":5,
       	"Trader Joes":6
       };
-      
+
       var states = {
       	"California":0,
       	"Texas":1,
@@ -302,10 +303,10 @@
 
       // Transaction / Traffic Variables
       // [0] = items[3], [1] = items[4]
-      var transTraffByStore = new Array(7); 
+      var transTraffByStore = new Array(7);
 			for (var i = 0; i < revByStore.length; i++){
 			  transTraffByStore[i] = [ [[], []], [[], []], [[], []] ];
-			}     	
+			}
 
       $.each(lines, function(index,value) {
         var lineNo = index;
@@ -338,7 +339,7 @@
             };
             chartRevCa.series.push(chartRevCaData);
         };
-        
+
         // TX Revenue
         for(var i = 0; i < revByStore.length; i++) {
            var chartRevTxData = {
@@ -352,7 +353,7 @@
             chartRevTx.series.push(chartRevTxData);
         };
 
-				// OR Revenue      
+				// OR Revenue
         for(var i = 0; i < revByStore.length; i++) {
            var chartRevOrData = {
                 name: storenames[[i]],
@@ -364,42 +365,50 @@
             chartRevOr.series.push(chartRevOrData);
         };
 
-        // CA Traffic / Transactions
+        // CA Traffic
 				for(var i = 0; i < transTraffByStore.length; i++) {
            var chartTandtCaData = {
-                name: storenames[[i]],
-                data: { 
-                	traffic: transTraffByStore[i][0][0],
-                	transactions: transTraffByStore[i][0][1]
-                },
+                name: storenames[[i]] + " Transactions",
+                data: transTraffByStore[i][0][0],
+                stack: storenames[[i]],
                 color: colors(i),
-                index: revByStore.length - 1 - i,
+                index: transTraffByStore.length - 1 - i,
                 legendIndex: i
             };
             chartTandtCa.series.push(chartTandtCaData);
-        };        
+
+            var chartTandtCaData = {
+                 name: storenames[[i]] + " Traffic",
+                 data: transTraffByStore[i][0][1],
+                 stack: storenames[[i]],
+                 color: colors(i),
+                 index: transTraffByStore.length - 1 - i,
+                 legendIndex: i
+            };
+            chartTandtCa.series.push(chartTandtCaData);
+          };
 
       // Chart Objects
       chartRevCa = jQuery.extend(true, {}, revOptions, chartRevCa);
       var chart1 = new Highcharts.Chart(chartRevCa);
-      
+
       chartRevTx = jQuery.extend(true, {}, revOptions, chartRevTx);
-      var chart2 = new Highcharts.Chart(chartRevTx);        
+      var chart2 = new Highcharts.Chart(chartRevTx);
 
       chartRevOr = jQuery.extend(true, {}, revOptions, chartRevOr);
-      var chart3 = new Highcharts.Chart(chartRevOr);  
+      var chart3 = new Highcharts.Chart(chartRevOr);
 
       chartTandtCa = jQuery.extend(true, {}, ttOptions, chartTandtCa);
-      var chart4 = new Highcharts.Chart(chartTandtCa);      
+      var chart4 = new Highcharts.Chart(chartTandtCa);
 
 		//Debug
     console.log(revByStore);
-    console.log(chartTandtCa);  
-    
+    console.log(chartTandtCa);
+
     }); // /.get()
 
-		
-    
+
+
 
     </script>
 
