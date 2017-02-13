@@ -90,7 +90,7 @@ Also, add settings for the height, width, padding, margin, and border-radius so 
 #chart-rev-ca, #chart-rev-tx, #chart-rev-or{
  	background-color: #eeeeee;
 	display: inline-block;
-	height: 400px;
+	height: 250px;
 	width: 32%;
 	padding: 0px;
 	margin: 1px;
@@ -98,8 +98,8 @@ Also, add settings for the height, width, padding, margin, and border-radius so 
 }
 
 .chart-800 {
-	width: 98%;
-	height: 400px;
+	width: 97%;
+	height: 200px;
 	padding: 0px;
 	margin: auto;
 	border-radius: 1px;
