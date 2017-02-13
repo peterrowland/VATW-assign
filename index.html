@@ -11,7 +11,6 @@
   <body>
 
     <div id="wrapper">
-      <h3>Markets Shiz... by Peter Rowland & Steve Trush</h3>
 
       <!-- Revenue Growth by State -->
       <div id="chart-rev-ca"> </div>
@@ -68,7 +67,7 @@
             style: {
               color: "#333333",
               fontFamily: "Helvetica,Arial,sans-serif",
-              fontSize: "12px"
+              fontSize: "16px"
             }
           }
         },
@@ -77,7 +76,7 @@
             style: {
               color: "#333333",
               fontFamily: "Helvetica,Arial,sans-serif",
-              fontSize: "12px"
+              fontSize: "14px"
             }
           }
           },
@@ -101,22 +100,28 @@
           color: "#808080"
         }],
         title: {
-            text: 'Annual Revenue (in million USD)'
+            text: 'Annual Revenue (in million USD)',
+            style: {
+              color: "#333333",
+              fontFamily: "Helvetica,Arial,sans-serif",
+              fontSize: "16px"
+            }
         },
         plotLines: [{
             value: 0,
-            width: 3,
+            width: 1,
             color: '#808080'
         }],
         tooltip: {
           valuePrefix: '$',
           valueSuffix: 'mil'
         },
-        legend: {
+      },
+      legend: {
           layout: 'vertical',
-          align: 'left',
+          align: 'right',
+          verticalAlign: 'middle',
           borderWidth: 0
-        }
       }
     }; // revOptions
 
@@ -137,17 +142,32 @@
     	},
       yAxis: {
 	  		min: 0,
+          minorTickInterval: 10,
+          max: 250,
 			  plotLines: [{
 			    value: 0,
 			    width: 1,
 			    color: "#808080"
 			  }],
+          title: {
+            style: {
+              color: "#333333",
+              fontFamily: "Helvetica,Arial,sans-serif",
+              fontSize: "16px"
+            }
+          }
       },
       legend: {
-          layout: 'vertical',
-          align: 'right',
-          borderWidth: 0
-       }
+        layout: 'vertical',
+        align: 'right',
+        verticalAlign: 'top',
+        x: -200,
+        y: 80,
+        floating: true,
+        borderWidth: 1,
+        backgroundColor: ((Highcharts.theme && Highcharts.theme.legendBackgroundColor) || '#FFFFFF'),
+        shadow: true
+      }
     };
 
     var chartRevCa = {
@@ -156,7 +176,7 @@
         },
         yAxis: {
         	title: {
-            text: 'Change in Revenue from Previous Year (%)'
+            text: 'Revenue (in million USD)'
         	},
         },
         chart: {
@@ -172,7 +192,7 @@
         },
         yAxis: {
         	title: {
-          	text: 'Change in Revenue from Previous Year (%)'
+          	text: 'Revenue (in million USD)'
         	}
         },
         chart: {
@@ -188,7 +208,7 @@
         },
         yAxis: {
         	title: {
-          	text: 'Change in Revenue from Previous Year (%)'
+          	text: 'Revenue (in million USD)'
         	}
         },
         chart: {
@@ -201,7 +221,7 @@
 
     var chartTandtCa = {
       title: {
-        text: "Transactions and Traffic in California"
+        text: "Customer Transactions and Traffic in California"
       },
       yAxis: {
       	title: {
@@ -224,7 +244,7 @@
 
     var chartTandtTx = {
       title: {
-        text: "Transactions and Traffic in Texas"
+        text: "Customer Transactions and Traffic in Texas"
       },
       yAxis: {
       	title: {
@@ -247,7 +267,7 @@
 
     var chartTandtOr = {
       title: {
-        text: "Transactions and Traffic in Oregon"
+        text: "Customer Transactions and Traffic in Oregon"
       },
       yAxis: {
       	title: {
