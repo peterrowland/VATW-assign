@@ -114,16 +114,26 @@
         },
         legend: {
           layout: 'vertical',
-          align: 'right',
+          align: 'left',
           borderWidth: 0
         }
       }
     }; // revOptions
 
+    var storenames = [
+      	"Walmart",
+        "Kmart",
+      	"Safeway",
+      	"Costco",
+      	"Whole Foods",
+      	"Trader Joes",
+      	"Target"
+    ];
     // Transactions Charts Options
     var ttOptions = {
     	xAxis: {
-				categories: ['2011', '2012', '2013', '2014', '2015']
+            categories: storenames
+				//categories: ['2011', '2012', '2013', '2014', '2015']
     	},
       yAxis: {
 	  		min: 0,
@@ -132,7 +142,12 @@
 			    width: 1,
 			    color: "#808080"
 			  }],
-      }
+      },
+      legend: {
+          layout: 'vertical',
+          align: 'right',
+          borderWidth: 0
+       }
     };
 
     var chartRevCa = {
@@ -193,11 +208,13 @@
       		text: 'Volume (in millions)'
       	}
       },
-      plotOptions: {
+    plotOptions: {
         column: {
-          stacking: "normal" // vs. "percent"
+            grouping: true,
+            shadow: false,
+            borderWidth: 0
         }
-      },
+    },
       chart: {
         renderTo: "chart-tandt-ca",
         type: "column"
@@ -214,11 +231,13 @@
       		text: 'Volume (in millions)'
       	}
       },
-      plotOptions: {
-        series: {
-          stacking: "normal" // vs. "percent"
+    plotOptions: {
+        column: {
+            grouping: true,
+            shadow: false,
+            borderWidth: 0
         }
-      },
+    },
       chart: {
         renderTo: "chart-tandt-tx",
         type: "column"
@@ -235,11 +254,13 @@
       		text: 'Volume (in millions)'
       	}
       },
-      plotOptions: {
-        series: {
-          stacking: "normal" // vs. "percent"
+    plotOptions: {
+        column: {
+            grouping: true,
+            shadow: false,
+            borderWidth: 0
         }
-      },
+    },
       chart: {
         renderTo: "chart-tandt-or",
         type: "column"
@@ -263,13 +284,33 @@
           return "#d030d0"; // target
           break;
         case 4:
-          return "#d6ea3b"; // safeway
+          return "#d6ea3b"; // costco
           break;
         case 5:
-          return "#333333"; // whole foods
+          return "#333333"; // kmart
           break;
         case 6:
-          return "#ff8319"; // target
+          return "#ff8319"; // trader joes
+      };
+    };
+        
+    function colors2(i) {
+      switch(i) {
+        case 0:
+          return "#c6c6c6"; // 2011
+          break;
+        case 1:
+          return "#9d9d9d"; // 2012
+          break;
+        case 2:
+          return "#6c6c6c"; // 2013
+          break;
+        case 3:
+          return "#464646"; // 2014
+          break;
+        case 4:
+          return "#000000"; // 2015
+          break;
       };
     };
 
@@ -279,24 +320,16 @@
 
     	// Common
       var lines = data.split('\n');
-      var storenames = [
-      	"Walmart",
-      	"Safeway",
-      	"Whole Foods",
-      	"Target",
-      	"Costco",
-      	"Kmart",
-      	"Trader Joes"
-      ];
+
 
       var stores = {
       	"Walmart":0,
-      	"Safeway":1,
-      	"Whole Foods":2,
-      	"Target":3,
-      	"Costco":4,
-      	"Kmart":5,
-      	"Trader Joes":6
+      	"Kmart":1,
+        "Safeway":2,
+      	"Costco":3,
+      	"Whole Foods":4,
+      	"Trader Joes":5,
+      	"Target":6
       };
 
       var states = {
@@ -304,6 +337,22 @@
       	"Texas":1,
       	"Oregon":2
       };
+        
+      var years = {
+          "2011":0,
+          "2012":1,
+          "2013":2,
+          "2014":3,
+          "2015":4,
+      };
+        
+      var yearnames = [
+          "2011",
+          "2012",
+          "2013",
+          "2014",
+          "2015",
+      ];
 
       // Revenue Variable
       var revByStore = new Array(7);
@@ -313,9 +362,9 @@
 
       // Transaction / Traffic Variables
       // [0] = items[3], [1] = items[4]
-      var transTraffByStore = new Array(7);
-			for (var i = 0; i < revByStore.length; i++){
-			  transTraffByStore[i] = [ [[], []], [[], []], [[], []] ];
+      var transTraffByYear = new Array(5);
+			for (var i = 0; i < transTraffByYear.length; i++){
+			  transTraffByYear[i] = [ [[], []], [[], []], [[], []] ];
 			}
 
       $.each(lines, function(index,value) {
@@ -330,9 +379,10 @@
         } else {
           var store = stores[items[0]];
           var state = states[items[1]];
+          var year = years[items[2]];
           revByStore[store][state].push(parseFloat(items[5]));
-          transTraffByStore[store][state][0].push(parseFloat(items[3]));
-          transTraffByStore[store][state][1].push(parseFloat(items[4]));
+          transTraffByYear[year][state][0].push(parseFloat(items[3]));
+          transTraffByYear[year][state][1].push(parseFloat(items[4]));
          }; // /else
 
        }); // /$.each()
@@ -367,7 +417,7 @@
 				// OR Revenue
         for(var i = 0; i < revByStore.length; i++) {
            var chartRevOrData = {
-                name: storenames[[i]],
+                name: storenames[i],
                 data: revByStore[i][2],
                 color: colors(i),
                 index: revByStore.length - 1 - i,
@@ -376,71 +426,108 @@
             chartRevOr.series.push(chartRevOrData);
         }; // for()
 
-        // CA Traffic
-				for(var i = 0; i < transTraffByStore.length; i++) {
-           var chartTransCaData = {
-                name: storenames[[i]] + " Transactions",
-                data: transTraffByStore[i][0][0],
-                stack: storenames[[i]] + " Transactions",
-                color: colors(i),
-                index: transTraffByStore.length - 1 - i,
-                legendIndex: i
-            };
-            chartTandtCa.series.push(chartTransCaData);
+        function placement(i) {
+            switch(i) {
+            case 0:
+              return -.4; //2011
+              break;
+            case 1:
+              return -.2; // 2012
+              break;
+            case 2:
+              return 0; // 2013
+              break;
+            case 3:
+              return .2; // 2014
+              break;
+            case 4:
+              return .4; // 2015
 
-            var chartTrafCaData = {
-                 name: storenames[[i]] + " Traffic",
-                 data: transTraffByStore[i][0][1],
-                 stack: storenames[[i]],
-                 color: colors(i),
-                 index: transTraffByStore.length - 1 - i,
-                 legendIndex: i
             };
-            chartTandtCa.series.push(chartTrafCaData);
-          }; // for()
+        };
+        // CA Traffic
+            for(var i = 0; i < transTraffByYear.length; i++) {
+               var chartTransCaData = {
+                    name: yearnames[i] + " Transactions",
+                    data: transTraffByYear[i][0][0],
+                    //stack: storenames[i] + " Transactions",
+                    color: colors2(i),
+                    index: transTraffByYear.length - 1 - i,
+                    legendIndex: i,
+                    pointPadding: 0.2,
+                    pointPlacement: placement(i)
+                    //yAxis: 1
+                };
+                chartTandtCa.series.push(chartTransCaData);
+
+                var chartTrafCaData = {
+                     name: yearnames[i] + " Traffic",
+                     data: transTraffByYear[i][0][1],
+                     //stack: storenames[i],
+                     color: "#FF"+colors2(i).substring(3),
+                     index: transTraffByYear.length - 1 - i,
+                     pointPadding: .2,
+                     pointPlacement: placement(i)-.04,
+                     legendIndex: i
+                     //yAxis: 1
+                };
+                chartTandtCa.series.push(chartTrafCaData);
+              }; // for()
 
           // TX Traffic
-  				for(var i = 0; i < transTraffByStore.length; i++) {
-             var chartTransTxData = {
-                  name: storenames[[i]] + " Transactions",
-                  data: transTraffByStore[i][1][0],
-                  stack: storenames[[i]] + " Transactions",
-                  color: colors(i),
-                  index: transTraffByStore.length - 1 - i,
-                  legendIndex: i
-              };
-              chartTandtTx.series.push(chartTransTxData);
+            for(var i = 0; i < transTraffByYear.length; i++) {
+               var chartTransTxData = {
+                    name: yearnames[i] + " Transactions",
+                    data: transTraffByYear[i][1][0],
+                    //stack: storenames[i] + " Transactions",
+                    color: colors2(i),
+                    index: transTraffByYear.length - 1 - i,
+                    legendIndex: i,
+                    pointPadding: 0.2,
+                    pointPlacement: placement(i)
+                    //yAxis: 1
+                };
+                chartTandtTx.series.push(chartTransTxData);
 
-              var chartTrafTxData = {
-                   name: storenames[[i]] + " Traffic",
-                   data: transTraffByStore[i][1][1],
-                   stack: storenames[[i]],
-                   color: colors(i),
-                   index: transTraffByStore.length - 1 - i,
-                   legendIndex: i
-              };
-              chartTandtTx.series.push(chartTrafTxData);
-            }; // for()
+                var chartTrafTxData = {
+                     name: yearnames[i] + " Traffic",
+                     data: transTraffByYear[i][1][1],
+                     //stack: storenames[i],
+                     color: "#FF"+colors2(i).substring(3),
+                     index: transTraffByYear.length - 1 - i,
+                     pointPadding: .2,
+                     pointPlacement: placement(i)-.04,
+                     legendIndex: i
+                     //yAxis: 1
+                };
+                chartTandtTx.series.push(chartTrafTxData);
+              }; // for()
 
             // OR Traffic
-    				for(var i = 0; i < transTraffByStore.length; i++) {
+            for(var i = 0; i < transTraffByYear.length; i++) {
                var chartTransOrData = {
-                    name: storenames[[i]] + " Transactions",
-                    data: transTraffByStore[i][2][0],
-                    stack: storenames[[i]] + " Transactions",
-                    color: colors(i),
-                    index: transTraffByStore.length - 1 - i,
-                    legendIndex: i
+                    name: yearnames[i] + " Transactions",
+                    data: transTraffByYear[i][2][0],
+                    //stack: storenames[i] + " Transactions",
+                    color: colors2(i),
+                    index: transTraffByYear.length - 1 - i,
+                    legendIndex: i,
+                    pointPadding: 0.2,
+                    pointPlacement: placement(i)
+                    //yAxis: 1
                 };
                 chartTandtOr.series.push(chartTransOrData);
 
                 var chartTrafOrData = {
-                     name: storenames[[i]] + " Traffic",
-                     data: transTraffByStore[i][2][1],
-                     stack: storenames[[i]],
-                     color: colors(i),
-                     index: transTraffByStore.length - 1 - i,
+                     name: yearnames[i] + " Traffic",
+                     data: transTraffByYear[i][2][1],
+                     //stack: storenames[i],
+                     color: "#FF"+colors2(i).substring(3),
+                     index: transTraffByYear.length - 1 - i,
+                     pointPadding: .2,
+                     pointPlacement: placement(i)-.04,
                      legendIndex: i
+                     //yAxis: 1
                 };
                 chartTandtOr.series.push(chartTrafOrData);
               }; // for()
