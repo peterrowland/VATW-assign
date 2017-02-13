@@ -142,7 +142,7 @@
     	},
       yAxis: {
 	  		min: 0,
-          minorTickInterval: 10,
+          minorTickInterval: 25,
           max: 250,
 			  plotLines: [{
 			    value: 0,
@@ -153,17 +153,17 @@
             style: {
               color: "#333333",
               fontFamily: "Helvetica,Arial,sans-serif",
-              fontSize: "16px"
+              fontSize: "14px"
             }
           }
       },
       legend: {
-        layout: 'horizontal',
-        align: 'top',
-        verticalAlign: 'top',
-        // x: -200,
-        // y: 80,
-        floating: true,
+        layout: 'vertical',
+        align: 'right',
+        //verticalAlign: 'top',
+        //x: 200,
+        //y: 0,
+        //floating: true,
         borderWidth: 1,
         backgroundColor: ((Highcharts.theme && Highcharts.theme.legendBackgroundColor) || '#FFFFFF'),
         shadow: true
@@ -295,16 +295,16 @@
           return "#f05555"; // walmart
           break;
         case 1:
-          return "#1bdb1b"; // safeway
+          return "#1bdb1b"; // KMART
           break;
         case 2:
-          return "#4545ff"; // whole foods
+          return "#4545ff"; // 
           break;
         case 3:
           return "#d030d0"; // target
           break;
         case 4:
-          return "#d6ea3b"; // costco
+          return "#f5ff00"; // whole foods
           break;
         case 5:
           return "#333333"; // kmart
@@ -465,91 +465,100 @@
 
             };
         };
-        // CA Traffic
+       // CA Traffic
             for(var i = 0; i < transTraffByYear.length; i++) {
-               var chartTransCaData = {
-                    name: yearnames[i] + " Transactions",
-                    data: transTraffByYear[i][0][1],
-                    //stack: storenames[i] + " Transactions",
-                    color: colors2(i),
-                    index: transTraffByYear.length - 1 - i,
-                    legendIndex: i,
-                    pointPadding: 0.2,
-                    pointPlacement: placement(i)
-                    //yAxis: 1
-                };
-                chartTandtCa.series.push(chartTransCaData);
-
+                
                 var chartTrafCaData = {
                      name: yearnames[i] + " Traffic",
                      data: transTraffByYear[i][0][0],
                      //stack: storenames[i],
-                     color: "#FF"+colors2(i).substring(3),
+                     color: colors2(i),
                      index: transTraffByYear.length - 1 - i,
                      pointPadding: .2,
-                     pointPlacement: placement(i)-.04,
+                     pointPlacement: placement(i),
                      legendIndex: i
                      //yAxis: 1
                 };
                 chartTandtCa.series.push(chartTrafCaData);
+                
+               var chartTransCaData = {
+                    name: yearnames[i] + " Transactions",
+                    data: transTraffByYear[i][0][1],
+                    //stack: storenames[i] + " Transactions",
+                     color: "#FF"+colors2(i).substring(3),
+                     index: transTraffByYear.length - 1 - i,
+                     pointPadding: .2,
+                     pointPlacement: placement(i)-.04,
+                   legendIndex: i
+                    //yAxis: 1
+                };
+                chartTandtCa.series.push(chartTransCaData);
+
+
               }; // for()
 
           // TX Traffic
             for(var i = 0; i < transTraffByYear.length; i++) {
-               var chartTransTxData = {
-                    name: yearnames[i] + " Transactions",
-                    data: transTraffByYear[i][1][1],
-                    //stack: storenames[i] + " Transactions",
-                    color: colors2(i),
-                    index: transTraffByYear.length - 1 - i,
-                    legendIndex: i,
-                    pointPadding: 0.2,
-                    pointPlacement: placement(i)
-                    //yAxis: 1
-                };
-                chartTandtTx.series.push(chartTransTxData);
-
+                
                 var chartTrafTxData = {
                      name: yearnames[i] + " Traffic",
                      data: transTraffByYear[i][1][0],
                      //stack: storenames[i],
-                     color: "#FF"+colors2(i).substring(3),
+                     color: colors2(i),
                      index: transTraffByYear.length - 1 - i,
                      pointPadding: .2,
-                     pointPlacement: placement(i)-.04,
+                     pointPlacement: placement(i),
                      legendIndex: i
                      //yAxis: 1
                 };
                 chartTandtTx.series.push(chartTrafTxData);
-              }; // for()
-
-            // OR Traffic
-            for(var i = 0; i < transTraffByYear.length; i++) {
-               var chartTransOrData = {
+                
+               var chartTransTxData = {
                     name: yearnames[i] + " Transactions",
-                    data: transTraffByYear[i][2][1],
+                    data: transTraffByYear[i][1][1],
                     //stack: storenames[i] + " Transactions",
-                    color: colors2(i),
-                    index: transTraffByYear.length - 1 - i,
-                    legendIndex: i,
-                    pointPadding: 0.2,
-                    pointPlacement: placement(i)
-                    //yAxis: 1
-                };
-                chartTandtOr.series.push(chartTransOrData);
-
-                var chartTrafOrData = {
-                     name: yearnames[i] + " Traffic",
-                     data: transTraffByYear[i][2][0],
-                     //stack: storenames[i],
                      color: "#FF"+colors2(i).substring(3),
                      index: transTraffByYear.length - 1 - i,
                      pointPadding: .2,
                      pointPlacement: placement(i)-.04,
+                   legendIndex: i
+                    //yAxis: 1
+                };
+                chartTandtTx.series.push(chartTransTxData);
+
+
+              }; // for()
+
+            // OR Traffic
+            for(var i = 0; i < transTraffByYear.length; i++) {
+                
+                var chartTrafOrData = {
+                     name: yearnames[i] + " Traffic",
+                     data: transTraffByYear[i][2][0],
+                     //stack: storenames[i],
+                     color: colors2(i),
+                     index: transTraffByYear.length - 1 - i,
+                     pointPadding: .2,
+                     pointPlacement: placement(i),
                      legendIndex: i
                      //yAxis: 1
                 };
                 chartTandtOr.series.push(chartTrafOrData);
+                
+               var chartTransOrData = {
+                    name: yearnames[i] + " Transactions",
+                    data: transTraffByYear[i][2][1],
+                    //stack: storenames[i] + " Transactions",
+                     color: "#FF"+colors2(i).substring(3),
+                     index: transTraffByYear.length - 1 - i,
+                     pointPadding: .2,
+                     pointPlacement: placement(i)-.04,
+                   legendIndex: i
+                    //yAxis: 1
+                };
+                chartTandtOr.series.push(chartTransOrData);
+
+
               }; // for()
 
 
